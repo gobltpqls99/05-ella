@@ -1,0 +1,6 @@
+/* 공통 사항 */
+.wrapper{
+	position: relative;
+	min-width: 1200px;
+	margin: auto;
+}
