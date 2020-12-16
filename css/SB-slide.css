@@ -12,11 +12,22 @@
 /* button */
 .SB-slide > .bt-slide {color: rgba(0,0,0,0.3); font-size: 5em; position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer; line-height: 0.95; transition: all 0.5s; user-select: none; text-shadow: 0 0 0.15em rgba(255,255,255,0.5);}
 .SB-slide > .bt-slide:hover {color: rgba(0,0,0,0.8);}
+
 .SB-slide > .bt-prev {left: 0;}
 .SB-slide > .bt-next {right: 0;}
+
+.SB-slide > .bt-prev::after{display: block; content: '〈';}
+.SB-slide > .bt-next::after{display: block; content: '〉';}
+
+.SB-slide > .pager-wrapper > .pager::after{display: block; content: '●';}
+
 .SB-slide > .pager-wrapper {width: 100%; position: absolute; display: flex; justify-content: center; padding: 0.5em 0;}
 .SB-slide > .pager-wrapper > .pager {color: red; opacity: .3; cursor: pointer; user-select: none;}
 .SB-slide > .pager-wrapper > .pager.active {opacity: .8;}
+
+
+
+
 
 
 @media screen and (max-width: 1199px) {
