@@ -5,8 +5,8 @@
 
 .SB-slide {position: relative;}
 .SB-slide > .slide-stage{overflow: hidden;}
-.SB-slide > .slide-stage > .slide-wrapper {width: 100%; position: relative; display: flex;}
-.SB-slide > .slide-stage > .slide-wrapper > .slide {flex-shrink: 0; flex-grow: 0; position: relative; left: -100%;}
+.SB-slide > .slide-stage > .slide-wrapper {width: 100%; position: relative; display: flex; transition: all 0.3s; left: 0;}
+.SB-slide > .slide-stage > .slide-wrapper > .slide {flex-shrink: 0; flex-grow: 0; position: relative; left: -100%; padding: 1%;}
 
 
 /* button */

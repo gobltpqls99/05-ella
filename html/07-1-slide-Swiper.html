@@ -10,34 +10,42 @@
 	<script src="../js/jquery-3.5.1.min.js"></script>
 </head>
 <body>
+	<style>
+		#mySlide{max-width: 800px; margin: auto; position: relative;
+		padding: 0 0.3%;}
+		.w-100{width: 100%;}
+		#mySlide .swiper-slide {padding: 8px;}
+		#mySlide
+	</style>
+
 	<div class="SB-slide wrapper-md" id="mySlide">
-		<div class="slide-stage wrapper">
-			<div class="slide-wrapper">
-				<div class="slide">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
 					<img src="../img/cherries.jpg" alt="슬라이드" class="w-100">
 				</div>
-				<div class="slide">
+				<div class="swiper-slide">
 					<img src="../img/popsicle.jpg" alt="슬라이드" class="w-100">
 				</div>
-				<div class="slide">
+				<div class="swiper-slide">
 					<img src="../img/salmon.jpg" alt="슬라이드" class="w-100">
 				</div>
-				<div class="slide">
+				<div class="swiper-slide">
 					<img src="../img/steak.jpg" alt="슬라이드" class="w-100">
 				</div>
-				<div class="slide">
+				<div class="swiper-slide">
 					<img src="../img/croissant.jpg" alt="슬라이드" class="w-100">
 				</div>
-				<div class="slide">
+				<div class="swiper-slide">
 					<img src="../img/wine.jpg" alt="슬라이드" class="w-100">
 				</div>
-				<div class="slide">
+				<div class="swiper-slide">
 					<img src="../img/sandwich.jpg" alt="슬라이드" class="w-100">
 				</div>
 			</div><!-- slide-wrapper -->
 		</div><!-- slide-stage -->
-		<div class="bt-slide bt-prev"></div>
-		<div class="bt-slide bt-next"></div>
+		<div class="swiper-button-prev"></div>
+		<div class="swiper-button-next"></div>
 		<div class="pager-wrapper">
 
 		</div>
@@ -49,12 +57,29 @@
 
 	<script src="../js/SBSlide.js"></script>
 	<script>
-		var mySlide = new SBSlide({
-			container: '#mySlide',
-			stageDefault : 5,
-			speed: 500
-		});
-		console.log(mySlide);
+		 var swiper = new Swiper('.swiper-container', {
+	 slidesPerView: 4,
+	 spaceBetween: 30,
+	 direction: vertical,
+	 loof: true,
+	 
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+	},
+	navigiton: {
+		prev: '.swiper-button-prev',
+		next: '.swiper-button-next'
+	},
+	/* autoplay: {
+		enabled: true,
+		delay : 1000
+	} */
+	swiper.on('slideChange',function(){
+		
+	})
+
+    });
 	</script>
 </body>
 </html>

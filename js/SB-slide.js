@@ -1,9 +1,10 @@
 /**
  * 프로그램 세팅값*/
-var container = '.SB-slide';
+var container = '#mySlide';
 var stageDefault = 4; //스테이지에 보여질 개수 기준값(pc)
 var moveCnt = 1;	// 한번에 움직여지는 슬라이드 개수
 var speed = 300;
+
 /**
  * 전역변수 
  * */
@@ -14,6 +15,10 @@ var $slide = $container.find('.slide');
 var $BtPrev = $container.find('.bt-prev');
 var $BtNext = $container.find('.bt-next');
 var $pagerWrapper = $container.find('.pager-wrapper');
+for(var i =0; i<$slide.length; i++ ) 
+$('<i class="pager"></i>').appendTo($pagerWrapper);
+var $pager = $container.find('.pager'); 
+
 var slideCnt = $slide.length;	// 슬라이드의 총 개수 length
 var slideLast = slideCnt - 1; // 슬라이드의 마지막 index 
 var slideWid;	// 슬라이드의 width
@@ -28,7 +33,7 @@ var target; // Animation($wrapper) 될 left 값
 function init() {
 	$wrapper.empty().css("left",0);
 	$pagerWrapper.find('.pager').removeClass('active').eq(now).addClass('active');
-	$slide.eq(now).clone().appendTo($wrapper).css("width", slideWid+"%");
+	$slide.eq(now).clone().appendTo($wrapper).css("width", slideWid+"%"); //appendTo wrapper에 붙이기
 	for(var i=0, my, prev=now; i<stageView; i++) {
 		prev = my = (prev == 0) ? slideLast : prev - 1;
 		$slide.eq(my).clone().prependTo($wrapper).css("width", slideWid+"%");
@@ -47,7 +52,7 @@ function init() {
  * 이벤트 콜백 
  * */
 function onResize() {
-	var wid = $(this).outerWidth();
+	var wid = $(this).width();  // 브라우저의 width
 	stageView = stageDefault;
 	if(wid < 576) stageView = 1;
 	else if(wid < 768) stageView = stageDefault < 2 ? stageDefault : 2;
@@ -92,12 +97,11 @@ else if(old < now) {
   * */
  $BtPrev.click(onPrev);
  $BtNext.click(onNext);
+//  $pager.click(onPager);
  /*
   var i =0; i<slideCnt; i++ 
  var i in $slide
  */
- for(var i =0; i<slideCnt; i++ ) 
-	$('<i class="pager"></i>').appendTo($pagerWrapper).click(onPager);
  
  $(window).resize(onResize).trigger("resize");
 
