@@ -12,9 +12,16 @@
 	<script src="../js/swiper-bundle.min.js"></script>
 </head>
 <body>
+	<div class="modal-shopping"></div>
+	<div class="modal-sp-inner">
+		<button>X close</button>
+	</div>
+	<div class="modal-login"></div>
+	<div class="modal-login-inner">
+		<button>X close</button>
+	</div>
 	<!-- .header-wrapper -->
 	<header class="header-wrapper">
-		<!-- .top-wrapper -->
 		<div class="top-wrapper">
 			<div class="top-wrap wrapper">
 				<i class="icon-earth fa fa-globe"></i>
@@ -66,9 +73,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- .top-wrapper // -->
-		<!-- .logo-wrapper -->
+		</div><!-- .top-wrapper // -->
 		<div class="logo-wrapper wrapper">
 			<i class="bars fa fa-bars"></i>
 			<div class="logo-wrap">
@@ -87,9 +92,7 @@
 				<a href="#"><i class="fa fa-user-circle"></i></a>
 				<a href="#" class="rel"><i class="fa fa-shopping-bag"></i><div class="cart-cnt">0</div></a>
 			</div>
-		</div>
-		<!-- .logo-wrapper // -->
-		<!-- .navi-wrapper -->
+		</div><!-- .logo-wrapper // -->
 		<div class="navi-wrapper rel">
 			<div class="wrapper">
 				<div class="navi navi-new">
@@ -130,19 +133,19 @@
 									<div class="title">BRANDS BY AlPHABET</div>
 									<ul class="alphabet-wrap"></ul>
 									<a href="#" class="bt-all hover-line">View all brands</a>
-								</div>
-							</div>
-						</div>
-					</div>
+								</div><!-- alphabet-wrapper -->
+							</div><!--  wrapper-->
+						</div><!-- navi-bottom -->
+					</div><!--  sub-wrapper type-1-->
+				</div><!--  navi navi-best-->
+				<div class="navi navi-men rel">
+					<ul class="sub-wrapper2"></ul>
 				</div>
-				<div class="navi navi-men">
-					<a href="#" class="hover-line">Men</a>
+				<div class="navi navi-women rel">
+					<ul class="sub-wrapper2"></ul>
 				</div>
-				<div class="navi navi-women">
-					<a href="#" class="hover-line">Women</a>
-				</div>
-				<div class="navi navi-kids">
-					<a href="#" class="hover-line">Kids</a>
+				<div class="navi navi-kids rel">
+					<ul class="sub-wrapper2"></ul>
 				</div>
 				<div class="navi navi-sales">
 					<!-- depth-1 삽입될 곳 -->
@@ -159,10 +162,51 @@
 				<a href="#" class="bt-wishlist"><i class="fa fa-heart"></i></a>
 				<a href="#" class="rel"><i class="fa fa-shopping-bag"></i><div class="cart-cnt">0</div></a>
 			</div>
+		</div><!-- .navi-wrapper // -->
+	</header><!-- .header-wrapper // -->
+
+	<section class="main-wrapper swiper-container">
+		<div class="banner-wrapper swiper-wrapper">
+			<div class="banner-wrap swiper-slide ">
+				<img src="../img/slide1.jpg" alt="s1" class="img w-100">
+				<div class="slogan-wrapper">
+					<div class="slogan-wrap">
+						<h4 class="title-sub">NEW COLLECTION</h4>
+						<h3 class="title">World of Denim</h3>
+						<p class="summary">Maxime placeat facere possimus voluptas assumenda.</p>
+						<a href="#" class="bt-link">SHOP DENIM</a>
+					</div><!-- slogan-wrap -->
+				</div><!-- slogan-wrapper -->
+			</div>
+			<div class="banner-wrap swiper-slide">
+				<img src="../img/slide2.jpg" alt="s2" class="img w-100">
+				<div class="slogan-wrapper">
+					<div class="slogan-wrap">
+						<h4 class="title-sub">NEW COLLECTION</h4>
+						<h3 class="title">World of Denim</h3>
+						<p class="summary">Maxime placeat facere possimus voluptas assumenda.</p>
+						<a href="#" class="bt-link">SHOP DENIM</a>
+					</div><!-- slogan-wrap -->
+				</div><!-- slogan-wrapper -->
+			</div>
+			<div class="banner-wrap swiper-slide">
+				<img src="../img/slide3.jpg" alt="s3" class="img w-100">
+				<div class="slogan-wrapper">
+					<div class="slogan-wrap">
+						<h4 class="title-sub">NEW COLLECTION</h4>
+						<h3 class="title">World of Denim</h3>
+						<p class="summary">Maxime placeat facere possimus voluptas assumenda.</p>
+						<a href="#" class="bt-link">SHOP DENIM</a>
+					</div><!-- slogan-wrap -->
+				</div><!-- slogan-wrapper -->
+			</div>
+		</div><!-- banner-warpper -->
+		<div class="pager-wrapper">
+			<div class="bt-prev bt-arrow">〈</div>
+			<div class="pager-wrap"></div><!-- pager-wrap -->
+			<div class="bt-next bt-arrow">〉</div>
 		</div>
-		<!-- .navi-wrapper // -->
-	</header>
-	<!-- .header-wrapper // -->
+	</section>
 	<script src="../js/index.js"></script>
 </body>
 </html>

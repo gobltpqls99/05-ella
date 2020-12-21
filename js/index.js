@@ -1,7 +1,41 @@
 /********* 전역선언 **********/
+var scTop, naviTop;
+
+// $(function(){
+// /* shopping */
+// 	$(".fa-shopping-bag, .cart-cnt").click(function(){
+// 		$(".modal-shopping, .modal-sp-inner").fadeIn();
+// 	});
+// 	$(".modal-shopping, .modal-sp-inner button").click(function(){
+// 		$(".modal-shopping, .modal-sp-inner").fadeOut();
+// 	});
+// /* login */
+// 	$(".a-login, .fa-user-circle").click(function(){
+// 		$(".modal-login, .modal-login-inner").fadeIn();
+// 	});
+// 	$(".modal-login, .modal-login-inner button").click(function(){
+// 		$(".modal-login, .modal-login-inner").fadeOut();
+// 	});
+// });
 
 
 /********* 사용자함수 **********/
+function mainBanner() {
+var mainBanner =  new Swiper('.main-wrapper.swiper-container',{
+	loop: true,
+	effect: 'fade',
+	pagination: {
+		el: '.main-wrapper .pager-wrap',
+		clickable: true,
+	  },
+	  navigation: {
+		nextEl: '.main-wrapper .bt-next',
+		prevEl: '.main-wrapper .bt-prev',
+	  },
+});
+}
+
+
 function createNavi(r) {
 	var html  = '<a href="'+r.link+'" class="hover-line">';
 	if(r.icon) html += '<i class="'+r.icon+'"></i> ';
@@ -25,24 +59,95 @@ function createSub(r) {
 	return html;
 }
 
+function createSub2(r) {
+	for(var i=0, html=''; i<r.depth2.length; i++) {
+		html += '<li class="depth depth2">';
+		html += '	<a href="'+r.depth2[i].link+'">'+r.depth2[i].name+'</a>';
+		if(r.depth2[i].depth3 && r.depth2[i].depth3.length > 0) {
+			html += '<ul>';
+			for(var j=0; j<r.depth2[i].depth3.length; j++) {
+				html += '<li class="depth depth3">';
+				html += '	<a href="'+r.depth2[i].depth3[j].link+'">'+r.depth2[i].depth3[j].name+'</a>';
+				html += '</li>';
+			}
+			html += '</ul>';
+		}
+		html += '</li>';
+	}
+	return html;
+}
+
+function createSubNavi(el, r) {
+	$(el).prepend(createNavi(r))
+	$(el).find('.sub-wrapper2').append(createSub2(r));
+	$(el).mouseenter(onSub2Enter);
+	$(el).mouseleave(onSub2Leave);
+	$(el).find('.depth2').mouseenter(onDepth2Enter);
+	$(el).find('.depth2').mouseleave(onDepth2Leave);
+}
+
 /********* 이벤트선언 **********/
 $('.top-wrapper .icon-down').click(onLangChg); // 언어선택
 $('.top-wrapper .bt-down').click(onLangSel); // 언어선택
+
 $.get('../json/navi-new.json', onNaviNew);	// new release 생성
 $.get('../json/navi-best.json', onNaviBest);	// best sellers 생성
 $.get('../json/navi-sales.json', onNaviSales); // sales 생성
 $.get('../json/new-products.json', onNewProducts); // new releases 상품 가져오기
+$.get('../json/navi-men.json', onNaviMen); // Men 상품 가져오기
+$.get('../json/navi-women.json', onNaviWomen); // Women 상품 가져오기
+$.get('../json/navi-kids.json', onNaviKids); // Kids 상품 가져오기
 
 $(".navi-wrapper .navi").mouseenter(onNaviEnter);
 $(".navi-wrapper .navi").mouseleave(onNaviLeave);
 
+$(window).scroll(onScroll).resize(onResize).trigger("resize");
+mainBanner();
+
 
 
 /********* 이벤트콜백 **********/
+function onResize(e){
+	naviTop = $(".navi-wrapper").offset().top;
+};
+function onScroll(e) {
+	scTop =$(this).scrollTop();
+
+	//navi-wrapper fixed
+	if(scTop >= naviTop) {
+		$(".navi-wrapper").css({"position":"fixed", "width":"100%", "top":"0"});
+	}else {
+
+	}
+	// console.log(scTop);
+}
+
+function onSub2Enter() {
+	$(this).find('.sub-wrapper2').stop().slideDown(100);
+}
+function onSub2Leave() {
+	$(this).find('.sub-wrapper2').stop().slideUp(100);
+}
+function onDepth2Enter() {
+	$(this).find('ul').stop().fadeIn(300);
+}
+function onDepth2Leave() {
+	$(this).find('ul').stop().fadeOut(300);
+}
+
+function onNaviMen(r) {
+	createSubNavi('.navi.navi-men', r);
+}
+function onNaviWomen(r) {
+	createSubNavi('.navi.navi-women', r);
+}
+
+function onNaviKids(r) {
+	createSubNavi('.navi.navi-kids', r);
+}
 function onNaviEnter() {
 	$(this).find(".sub-wrapper").addClass("active");
 }
-
 function onNaviLeave() {
 	$(this).find(".sub-wrapper").removeClass("active");
 }
