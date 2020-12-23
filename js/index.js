@@ -1,40 +1,22 @@
 /********* 전역선언 **********/
-var scTop, naviTop;
-
-// $(function(){
-// /* shopping */
-// 	$(".fa-shopping-bag, .cart-cnt").click(function(){
-// 		$(".modal-shopping, .modal-sp-inner").fadeIn();
-// 	});
-// 	$(".modal-shopping, .modal-sp-inner button").click(function(){
-// 		$(".modal-shopping, .modal-sp-inner").fadeOut();
-// 	});
-// /* login */
-// 	$(".a-login, .fa-user-circle").click(function(){
-// 		$(".modal-login, .modal-login-inner").fadeIn();
-// 	});
-// 	$(".modal-login, .modal-login-inner button").click(function(){
-// 		$(".modal-login, .modal-login-inner").fadeOut();
-// 	});
-// });
-
+var scTop, topHeight, logoHeight, winWidth, navi = [];
 
 /********* 사용자함수 **********/
-function mainBanner() {
-var mainBanner =  new Swiper('.main-wrapper.swiper-container',{
-	loop: true,
-	effect: 'fade',
-	pagination: {
-		el: '.main-wrapper .pager-wrap',
-		clickable: true,
-	  },
-	  navigation: {
-		nextEl: '.main-wrapper .bt-next',
-		prevEl: '.main-wrapper .bt-prev',
-	  },
-});
-}
 
+function mainBanner() {
+	var swiper = new Swiper('.main-wrapper.swiper-container', {
+		loop: true,
+		effect: 'fade',
+		pagination: {
+			el: '.main-wrapper .pager-wrap',
+			clickable: true,
+		},
+		navigation: {
+			nextEl: '.main-wrapper .bt-next',
+			prevEl: '.main-wrapper .bt-prev',
+		},
+	});
+}
 
 function createNavi(r) {
 	var html  = '<a href="'+r.link+'" class="hover-line">';
@@ -86,73 +68,231 @@ function createSubNavi(el, r) {
 	$(el).find('.depth2').mouseleave(onDepth2Leave);
 }
 
+function naviShowHide() {
+	if(winWidth >= 1199) { // PC
+		if(scTop >= topHeight + logoHeight){
+			$(".navi-wrapper").css({"position": "fixed"});
+			$(".navi-wrapper > .wrapper").css("max-width", "100%");
+			$(".navi-wrapper .navi-logo").css("display", "block");
+			$(".navi-wrapper .bt-login").css("display", "block");
+		}
+		else {
+			$(".navi-wrapper").css("position", "relative");
+			$(".navi-wrapper > .wrapper").css("max-width", "1200px");
+			$(".navi-wrapper .navi-logo").css("display", "none");
+			$(".navi-wrapper .bt-login").css("display", "none");
+		}
+		$(".logo-wrapper").css({"position": "relative"});
+	}
+	else { // Mobile
+		if(scTop >= topHeight)
+			$(".logo-wrapper").css({"position": "fixed"});
+		else
+			$(".logo-wrapper").css("position", "relative");
+		$(".navi-wrapper").css({"position": "relative"});
+	}
+}
+
+function createMoNavi() {
+	console.log(navi);
+	var html = '';
+	html += '<div class="top-wrap">';
+	html += '	<div class="close-wrap3 bt-close" onclick="onModalHide()">';
+	html += '		<i class="fa fa-times"></i>';
+	html += '	</div>';
+	html += '	<div class="tel-wrap">Available 24/7 at <strong>(018) 900-6690</strong></div>';
+	html += '</div>';
+	html += '<ul>';
+	for(var i=0; i<navi.length; i++) {
+		html += '<li onclick="createDepth2('+i+');">';
+		html += '<a href="#">'+navi[i].name+'</a>';
+		html += '<i class="fa fa-angle-right"></i>';
+		html += '</li>';
+	}
+	html += '</ul>';
+	$(".modal-navi").find('.depth1').html(html)
+	$(".modal-navi").find('.depth1').append($(".trans-wrapper").clone().attr("style", "")).find('.trans-bg').remove();
+	$(".modal-navi").find('.depth1').find('.trans-wrapper .bt-down').click(onLangSel);
+
+
+	$(".modal-navi .depth2, .modal-navi .depth3").removeClass('active');
+}
+
+function createDepth2(idx) {
+	html  = '<div class="top-wrap">';
+	html += '	<div class="close-wrap3 bt-prev" onclick="closeDepth(2)">';
+	html += '		<i class="fa fa-angle-left"></i>';
+	html += '	</div>';
+	html += '	<h4 class="title">'+navi[idx].name+'</h4>';
+	html += '</div>';
+	html += '<ul>';
+	for(var i=0; i<navi[idx].depth2.length; i++) {
+		if(navi[idx].depth2[i].depth3 && navi[idx].depth2[i].depth3.length > 0){
+			html += '<li onclick="createDepth3('+idx+', '+i+');">';
+			html += '<a href="#">'+navi[idx].depth2[i].name+'</a>';
+			html += '<i class="fa fa-angle-right"></i>';
+			html += '</li>';
+		}else {
+			html += '<li>';
+			html += '<a href="#">'+navi[idx].depth2[i].name+'</a>';
+			html += '</li>';
+		}
+	}
+	html += '</ul>';
+	$(".modal-navi .depth2").html(html);
+	$(".modal-navi .depth2").addClass("active")
+}
+
+
+function createDepth3(idx, idx2) {
+	html  = '<div class="top-wrap">';
+	html += '	<div class="close-wrap3 bt-prev" onclick="closeDepth(3)">';
+	html += '		<i class="fa fa-angle-left"></i>';
+	html += '	</div>';
+	html += '	<h4 class="title">'+navi[idx].depth2[idx2].name+'</h4>';
+	html += '</div>';
+	html += '<ul>';
+	for(var i=0; i<navi[idx].depth2[idx2].depth3.length; i++) {
+		html += '<li">';
+		html += '<a href="#">'+navi[idx].depth2[idx2].depth3[i].name+'</a>';
+		html += '</li>';
+	}
+	html += '</ul>';
+	$(".modal-navi .depth3").html(html);
+	$(".modal-navi .depth3").addClass("active")
+}
+
+function closeDepth(n) {
+	$(".modal-navi .depth"+n).removeClass("active");
+}
+
+
 /********* 이벤트선언 **********/
+mainBanner();	// 배너세팅
+$(window).scroll(onScroll);
+$(window).resize(onResize).trigger("resize");
+
 $('.top-wrapper .icon-down').click(onLangChg); // 언어선택
 $('.top-wrapper .bt-down').click(onLangSel); // 언어선택
+$('.trans-wrapper .trans-bg').click(onTransBg); // trans창 닫기
+$('.trans-wrapper .lang').click(onLangClick); // trans창 닫기
 
 $.get('../json/navi-new.json', onNaviNew);	// new release 생성
 $.get('../json/navi-best.json', onNaviBest);	// best sellers 생성
 $.get('../json/navi-sales.json', onNaviSales); // sales 생성
-$.get('../json/new-products.json', onNewProducts); // new releases 상품 가져오기
 $.get('../json/navi-men.json', onNaviMen); // Men 상품 가져오기
 $.get('../json/navi-women.json', onNaviWomen); // Women 상품 가져오기
 $.get('../json/navi-kids.json', onNaviKids); // Kids 상품 가져오기
 
-$(".navi-wrapper .navi").mouseenter(onNaviEnter);
-$(".navi-wrapper .navi").mouseleave(onNaviLeave);
+$.get('../json/new-products.json', onNewProducts); // new releases 상품 가져오기
+$.get('../json/looking.json', onLooking); // Looking 생성
 
-$(window).scroll(onScroll).resize(onResize).trigger("resize");
-mainBanner();
+$(".navi-wrapper .navi").mouseenter(onNaviEnter);	// 메인네비
+$(".navi-wrapper .navi").mouseleave(onNaviLeave);	// 메인네비
+
+$(".modal-trigger").click(onModalShow);
+$(".modal-container").click(onModalHide);
+$('.modal-wrapper').click(onModalWrapperClick);
+$('.modal-wrapper').find(".bt-close").click(onModalHide);
+
 
 
 
 /********* 이벤트콜백 **********/
-function onResize(e){
-	naviTop = $(".navi-wrapper").offset().top;
-};
-function onScroll(e) {
-	scTop =$(this).scrollTop();
 
-	//navi-wrapper fixed
-	if(scTop >= naviTop) {
-		$(".navi-wrapper").css({"position":"fixed", "width":"100%", "top":"0"});
-	}else {
 
+function onLooking(r) {
+	for(var i=0, html=""; i<r.length; i++){
+		html += '<li class="spot">';
+		html += '<a href="'+r[i].link+'">'
+		html += '<img src="'+r[i].src+'" class="w-100 animate__animated">';
+		html += '<h3 class="title hover-line">'+r[i].title+'</h3></a>';
+		html += '</li>';
 	}
-	// console.log(scTop);
+	$(".looking-wrapper .spot-wrapper").append(html);
+}
+
+function onTransBg(e) {
+	e.stopPropagation();
+	onLangChg();
+}
+
+function onModalWrapperClick(e) {
+	e.stopPropagation();
+}
+
+function onModalShow(e) {
+	e.preventDefault();	// 기본이벤트 a니까 href의 기능(기본기능)을 막는다.
+	$(".modal-container").css({"display": "block"});
+	$(".modal-container").css("opacity");
+	$(".modal-container").addClass('active');
+	$("body").addClass("hide");
+	$($(this).data('modal')).addClass("active");
+	if($(this).data('modal') === '.modal-navi') createMoNavi();
+}
+
+
+function onModalHide(e) {
+	$(".modal-container").removeClass('active');
+	$('.modal-wrapper').removeClass("active");
+	setTimeout(function(){
+		$(".modal-container").css({"display": "none"});
+		$("body").removeClass("hide");
+	}, 300);
+}
+
+function onResize(e) {
+	topHeight = $('.top-wrapper').outerHeight();
+	logoHeight = $('.logo-wrapper').outerHeight();
+	winWidth = $(window).width();
+}
+
+function onScroll(e) {
+	scTop = $(this).scrollTop();
+	naviShowHide(); // navi-wrapper fixed
 }
 
 function onSub2Enter() {
-	$(this).find('.sub-wrapper2').stop().slideDown(100);
+	$(this).find('.sub-wrapper2').stop().slideDown(300);
 }
+
 function onSub2Leave() {
-	$(this).find('.sub-wrapper2').stop().slideUp(100);
+	$(this).find('.sub-wrapper2').stop().slideUp(300);
 }
+
 function onDepth2Enter() {
 	$(this).find('ul').stop().fadeIn(300);
 }
+
 function onDepth2Leave() {
 	$(this).find('ul').stop().fadeOut(300);
 }
 
 function onNaviMen(r) {
+	navi[2] = r;
 	createSubNavi('.navi.navi-men', r);
 }
+
 function onNaviWomen(r) {
+	navi[3] = r;
 	createSubNavi('.navi.navi-women', r);
 }
 
 function onNaviKids(r) {
+	navi[4] = r;
 	createSubNavi('.navi.navi-kids', r);
 }
+
 function onNaviEnter() {
 	$(this).find(".sub-wrapper").addClass("active");
 }
+
 function onNaviLeave() {
 	$(this).find(".sub-wrapper").removeClass("active");
 }
 
 function onNaviNew(r) {
+	navi[0] = r;
 	$(".navi.navi-new").prepend(createNavi(r));
 	var html = createSub(r);
 	html += '<div class="sub-banner">';
@@ -162,6 +302,7 @@ function onNaviNew(r) {
 }
 
 function onNaviBest(r) {
+	navi[1] = r;
 	$(".navi.navi-best").prepend(createNavi(r));
 	$(".navi.navi-best").find('.sub-navi-wrapper').append(createSub(r));
 	for(var i=0; i<r.alphabet.length; i++) {
@@ -174,16 +315,17 @@ function onNaviBest(r) {
 }
 
 function onNaviSales(r) {
+	navi[5] = r;
 	$(".navi.navi-sales").prepend(createNavi(r));
-	for(var i=0; i<r.brands.length; i++) {
-		html  = '<div class="brand-wrap">';
-		html += '<div class="img-wrap" style="background-image: url('+r.brands[i].src+'); order: '+i%2+'">';
+	for(var i=0; i<r.depth2.length; i++) {
+		html  = '<div class="depth3-wrap">';
+		html += '<div class="img-wrap" style="background-image: url('+r.depth2[i].src+'); order: '+i%2+'">';
 		html += '</div>';
-		html += '<ul class="brand-link">';
-		html += '<li class="sub-navi bold">'+r.brands[i].company+'</li>';
-		for(var j=0; j<r.brands[i].brand.length; j++) {
+		html += '<ul class="depth3-link">';
+		html += '<li class="sub-navi bold">'+r.depth2[i].name+'</li>';
+		for(var j=0; j<r.depth2[i].depth3.length; j++) {
 			html += '<li class="sub-navi hover-line">';
-			html += '<a href="'+r.brands[i].brand[j].link+'">'+r.brands[i].brand[j].name+'</a>';
+			html += '<a href="'+r.depth2[i].depth3[j].link+'">'+r.depth2[i].depth3[j].name+'</a>';
 			html += '</li>';
 		}
 		html += '</ul>';
@@ -216,7 +358,21 @@ function onNewProducts(r) {
 		$slide = $(html).appendTo(".navi-new .swiper-wrapper");
 		if(Number(r[i].star) > 0) $slide.find(".star > i").addClass("active");
 		$slide.find(".mask").css("left", r[i].star * 20 + "%");
-	}
+	};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	var swiper = new Swiper('#newSlide .swiper-container', {
 		slidesPerView: 4,
 		loop: true,
@@ -229,6 +385,7 @@ function onNewProducts(r) {
 		},
 	});
 }
+
 function onLangChg() {
 	$(".trans-wrapper").stop().slideToggle(200);
 	$(".trans-wrapper .lang-sel").stop().slideUp(200);
@@ -237,3 +394,21 @@ function onLangSel() {
 	$(".trans-wrapper .lang-sel").stop().slideUp(200);
 	if($(this).next().css("display") === 'none') $(this).next().stop().slideDown(200);
 }
+function onLangClick() {
+	var $container = $(this).parent().parent().parent();
+	var lang = $(this).text();
+	var bg = $(this).prev().css("background-image");
+	$container.find('.lang').removeClass('active');
+	$(this).addClass('active');
+	$container.find('.flag-now').css("background-image", bg);
+	$container.find('.lang-now').text(lang);
+	$(this).parent().parent().stop().slideUp(200);
+}
+
+
+// $(".brand-wrap .brand .pop").mouseleave(function(){
+// 	$(this).css({"background": "#fff", "color":"#293356"});
+// });
+// $(".brand-wrap .brand .pop").mouseenter(function(){
+// 	$(this).css({"background": "#293356", "color":"#fff"});
+// });
