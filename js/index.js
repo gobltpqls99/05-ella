@@ -1,7 +1,38 @@
 /********* 전역선언 **********/
 var scTop, topHeight, logoHeight, winWidth, navi = [];
 
+
+
 /********* 사용자함수 **********/
+function renderPrd() {
+	$('.prd').each(function(i){
+		var discount = $(this).data('discount');
+		var icon = $(this).data('icon');
+		$(this).find('.icon-wrap').empty();
+		if(discount) {
+			$(this).find('.icon-wrap').append('<div class="discount">'+discount+'</div>');
+		}
+		if(icon && icon.length > 0) {
+			for(var i=0, html=''; i<icon.length; i++) {
+				html += '<div class="icon" style="background-color: '+icon[i].bg+';">'+icon[i].title+'</div>';
+			}
+			$(this).find('.icon-wrap').append(html);
+		}
+	});
+}
+
+function chgImg(el, src) {
+	$(el).parents('.prd').find('.img-front').attr('src', src);
+	$(el).parent().addClass('active').siblings().removeClass('active');
+}
+
+function renderStar() {
+	$(".star").each(function(i){
+		var score = Number($(this).data('score'));
+		if(score > 0) $(this).find("i").addClass("active");
+		$(this).find(".mask").css("left", score * 20 + "%");
+	});
+}
 
 function mainBanner() {
 	var swiper = new Swiper('.main-wrapper.swiper-container', {
@@ -127,12 +158,13 @@ function createDepth2(idx) {
 	html += '</div>';
 	html += '<ul>';
 	for(var i=0; i<navi[idx].depth2.length; i++) {
-		if(navi[idx].depth2[i].depth3 && navi[idx].depth2[i].depth3.length > 0){
+		if(navi[idx].depth2[i].depth3 && navi[idx].depth2[i].depth3.length > 0) {
 			html += '<li onclick="createDepth3('+idx+', '+i+');">';
 			html += '<a href="#">'+navi[idx].depth2[i].name+'</a>';
 			html += '<i class="fa fa-angle-right"></i>';
 			html += '</li>';
-		}else {
+		}
+		else {
 			html += '<li>';
 			html += '<a href="#">'+navi[idx].depth2[i].name+'</a>';
 			html += '</li>';
@@ -143,7 +175,6 @@ function createDepth2(idx) {
 	$(".modal-navi .depth2").addClass("active")
 }
 
-
 function createDepth3(idx, idx2) {
 	html  = '<div class="top-wrap">';
 	html += '	<div class="close-wrap3 bt-prev" onclick="closeDepth(3)">';
@@ -153,27 +184,81 @@ function createDepth3(idx, idx2) {
 	html += '</div>';
 	html += '<ul>';
 	for(var i=0; i<navi[idx].depth2[idx2].depth3.length; i++) {
-		html += '<li">';
+		html += '<li>';
 		html += '<a href="#">'+navi[idx].depth2[idx2].depth3[i].name+'</a>';
 		html += '</li>';
 	}
 	html += '</ul>';
 	$(".modal-navi .depth3").html(html);
-	$(".modal-navi .depth3").addClass("active")
+	$(".modal-navi .depth3").addClass("active");
 }
 
 function closeDepth(n) {
 	$(".modal-navi .depth"+n).removeClass("active");
 }
 
+function createPrd(r, el) {
+	for(var i=0, html=''; i<r.length; i++) {
+		html  = '<li class="prd swiper-slide" '; 
+		html += 'data-discount="'+(r[i].discount || '')+'" ';
+		html += 'data-icon=\'[';
+		if(r[i].icon && r[i].icon.length > 0) {
+			for(var j=0; j<r[i].icon.length; j++) {
+				html += '{"title": "'+r[i].icon[j].title+'", "bg": "'+r[i].icon[j].bg+'"},';
+			}
+			html = html.slice(0, -1);
+		}
+		html += ']\'>';
+		html += '<div class="icon-wrap"></div>';
+		html += '<div class="quick-wrap">';
+		html += '<i class="fa fa-eye"></i>';
+		html += '<span>Quick View</span>';
+		html += '</div>';
+		html += '<div class="img-wrap">';
+		html += '<img src="'+r[i].imgFront[0].big+'" alt="사진" class="w-100 img-front">';
+		html += '<img src="'+r[i].imgBack+'" alt="사진" class="w-100">';
+		html += '<a href="#" class="bt-white">ADD CART</a>';
+		html += '</div>';
+		html += '<div class="title-wrap">';
+		html += '<div class="title">'+r[i].title+'</div>';
+		html += '<i class="bt-like far fa-heart" onclick="$(this).addClass(\'fa\').removeClass(\'far\');"></i>';
+		html += '</div>';
+		html += '<ul class="choice-wrap">';
+		for(var j=0; j<r[i].imgFront.length; j++) {
+			html += '<li class="choice '+(j==0 ? 'active': '')+'">';
+			html += '<img src="'+r[i].imgFront[j].thumb+'" alt="thumb" class="w-100" onclick="chgImg(this, \''+r[i].imgFront[j].big+'\');">';
+			html += '</li>';
+		}
+		html += '</ul>';
+		html += '<div class="content-wrap">';
+		html += '<span class="content hover-line">'+r[i].content+'</span>';
+		html += '<span> - </span>';
+		html += '<span class="color hover-line">'+r[i].color+'</span>';
+		html += '</div>';
+		html += '<div class="price-wrap">'+r[i].price+'</div>';
+		html += '<div class="star-wrap">';
+		html += '<div class="star" data-score="'+r[i].star+'">';
+		for(var j=0; j<5; j++) html += '<i class="fa fa-star"></i>';
+		html += '<div class="mask"></div>';
+		html += '</div>';
+		html += '<a href="'+r[i].link+'" class="bt-more">MORE SIZES ABAILABLE</a>';
+		html += '</div>';
+		html += '</li>';
+		$(el).append(html);
+	}
+	renderStar();	// star
+	renderPrd();	// discount
+}
+
 
 /********* 이벤트선언 **********/
 mainBanner();	// 배너세팅
-$(window).scroll(onScroll);
-$(window).resize(onResize).trigger("resize");
+
+$(window).scroll(onScroll); // scroll spy
+$(window).resize(onResize).trigger("resize"); // el 높이, 폭, 위치
 
 $('.top-wrapper .icon-down').click(onLangChg); // 언어선택
-$('.top-wrapper .bt-down').click(onLangSel); // 언어선택
+$('.trans-wrapper .bt-down').click(onLangSel); // 언어선택
 $('.trans-wrapper .trans-bg').click(onTransBg); // trans창 닫기
 $('.trans-wrapper .lang').click(onLangClick); // trans창 닫기
 
@@ -185,7 +270,10 @@ $.get('../json/navi-women.json', onNaviWomen); // Women 상품 가져오기
 $.get('../json/navi-kids.json', onNaviKids); // Kids 상품 가져오기
 
 $.get('../json/new-products.json', onNewProducts); // new releases 상품 가져오기
-$.get('../json/looking.json', onLooking); // Looking 생성
+$.get('../json/looking.json', onLooking);	// Looking 생성
+
+$.get('../json/prd.json', onPrd);	// prd banner 생성
+$.get('../json/collection.json', onCollection);	// collection banner 생성
 
 $(".navi-wrapper .navi").mouseenter(onNaviEnter);	// 메인네비
 $(".navi-wrapper .navi").mouseleave(onNaviLeave);	// 메인네비
@@ -197,19 +285,61 @@ $('.modal-wrapper').find(".bt-close").click(onModalHide);
 
 
 
-
 /********* 이벤트콜백 **********/
 
+function onCollection(r) {
+	createPrd(r, '.collection-wrap .swiper-wrapper');
+	var swiper = new Swiper('.collection-wrap.swiper-container', {
+		slidesPerView: 1,
+		loop: true,
+		navigation: {
+			nextEl: '.collection-wrap .bt-next',
+			prevEl: '.collection-wrap .bt-prev',
+		},
+		breakpoints: {
+			576: {
+				slidesPerView: 2
+			},
+			768: {
+				slidesPerView: 3
+			}
+		}
+	});
+}
+
+function onPrd(r) {
+	createPrd(r, '.prd-wrap');
+	var swiper = new Swiper('.prd-wrapper.swiper-container', {
+		slidesPerView: 1,
+		loop: true,
+		navigation: {
+			nextEl: '.prd-wrapper .bt-next',
+			prevEl: '.prd-wrapper .bt-prev',
+		},
+		breakpoints: {
+			576: {
+				slidesPerView: 2
+			},
+			768: {
+				slidesPerView: 3
+			},
+			992: {
+				slidesPerView: 4
+			},
+		}
+	});
+}
 
 function onLooking(r) {
-	for(var i=0, html=""; i<r.length; i++){
+	for(var i=0, html=''; i<r.length; i++) {
 		html += '<li class="spot">';
-		html += '<a href="'+r[i].link+'">'
-		html += '<img src="'+r[i].src+'" class="w-100 animate__animated">';
-		html += '<h3 class="title hover-line">'+r[i].title+'</h3></a>';
+		html += '<a href="'+r[i].link+'">';
+		html += '<img src="'+r[i].src+'" alt="spot-img" class="w-100 animate__animated">';
+		html += '<h3 class="title hover-line">'+r[i].title+'</h3>';
+		html += '</a>';
 		html += '</li>';
 	}
-	$(".looking-wrapper .spot-wrapper").append(html);
+	$(".looking-wrapper .spot-wrapper").html(html);
 }
 
 function onTransBg(e) {
@@ -318,10 +448,10 @@ function onNaviSales(r) {
 	navi[5] = r;
 	$(".navi.navi-sales").prepend(createNavi(r));
 	for(var i=0; i<r.depth2.length; i++) {
-		html  = '<div class="depth3-wrap">';
+		html  = '<div class="brand-wrap">';
 		html += '<div class="img-wrap" style="background-image: url('+r.depth2[i].src+'); order: '+i%2+'">';
 		html += '</div>';
-		html += '<ul class="depth3-link">';
+		html += '<ul class="brand-link">';
 		html += '<li class="sub-navi bold">'+r.depth2[i].name+'</li>';
 		for(var j=0; j<r.depth2[i].depth3.length; j++) {
 			html += '<li class="sub-navi hover-line">';
@@ -343,7 +473,7 @@ function onNewProducts(r) {
 		html += '<div class="content-wrap">';
 		html += '<h4 class="title">'+r[i].title+'</h4>';
 		html += '<p class="summary">'+r[i].summary+'</p>';
-		html += '<div class="star">';
+		html += '<div class="star" data-score="'+r[i].star+'">';
 		for(var j=0; j<5; j++) html += '<i class="fa fa-star"></i>';
 		if(Number(r[i].star) > 0) html += '<div class="mask"></div>';
 		html += '</div>';
@@ -356,23 +486,8 @@ function onNewProducts(r) {
 		html += '</div>';
 		html += '</div>';
 		$slide = $(html).appendTo(".navi-new .swiper-wrapper");
-		if(Number(r[i].star) > 0) $slide.find(".star > i").addClass("active");
-		$slide.find(".mask").css("left", r[i].star * 20 + "%");
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		renderStar();
+	}
 	var swiper = new Swiper('#newSlide .swiper-container', {
 		slidesPerView: 4,
 		loop: true,
@@ -385,13 +500,13 @@ function onNewProducts(r) {
 		},
 	});
 }
-
 function onLangChg() {
 	$(".trans-wrapper").stop().slideToggle(200);
 	$(".trans-wrapper .lang-sel").stop().slideUp(200);
 }
 function onLangSel() {
 	$(".trans-wrapper .lang-sel").stop().slideUp(200);
+	console.log($(this).next());
 	if($(this).next().css("display") === 'none') $(this).next().stop().slideDown(200);
 }
 function onLangClick() {
@@ -404,11 +519,3 @@ function onLangClick() {
 	$container.find('.lang-now').text(lang);
 	$(this).parent().parent().stop().slideUp(200);
 }
-
-
-// $(".brand-wrap .brand .pop").mouseleave(function(){
-// 	$(this).css({"background": "#fff", "color":"#293356"});
-// });
-// $(".brand-wrap .brand .pop").mouseenter(function(){
-// 	$(this).css({"background": "#293356", "color":"#fff"});
-// });
